@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="author" content="Sebastien Mesili <sebastien@mesili.fr>">
+        <meta name="description" content="This page helps you spotting dead pixels, bright and dark spots in your screen.">
+        <meta property="og:description" content="This page helps you spotting dead pixels, bright and dark spots in your screen.">
+        <meta property="og:title" content="The dead pixel page">
+        <title>The dead pixel page</title>
+
+    </head>
+    <body id="body">
+        <div id="filler">
+            &nbsp;
+            <div id="instructions">
+                This page helps you spotting dead pixels, bright and dark spots in your screen. <br />
+                Move the mouse around the screen to change the Hue, Saturation and Lightness. <br />
+                Pro tip : Press F1 or Ctrl + Cmd f to see the page in full screen mode.
+                <br />
+                <hr />
+                Click this message to make it disappear. 
+            </div>
+        </div>
+        <script>
+            (function() {
+                const instructions = document.getElementById('instructions')
+                const filler = document.getElementById('filler')
+                let saturation = 0
+                let slope = 'up'
+
+                const updateDisplay = (event) => {
+                    const H = event.pageX / filler.clientWidth  * 360
+                    const S = 40 + saturation
+                    const L = (event.pageY / filler.clientHeight) * 100
+                    const output = `hsl(${parseInt(H,10)}, ${parseInt(S,10)}%, ${parseInt(L,10)}%)`
+                    filler.style.backgroundColor = output
+
+                    slope === 'up' ? saturation++ : saturation--
+
+                    if (S > 99) {
+                        slope = 'down'
+                    } else if (S < 30) {
+                        slope = 'up'
+                    }
+
+                }
+                filler.addEventListener("mousemove", updateDisplay, false)
+
+                const hideInstructions = () => {
+                    instructions.style.display = 'none'
+                }
+                instructions.addEventListener("click", hideInstructions, false)
+            })()
+        </script>
+        <style>
+            #filler {
+                position:absolute;
+                top:0;
+                bottom:0;
+                left:0;
+                right:0;
+                height:auto;
+                width:auto;
+                    display:flex;
+                        justify-content:center;
+                            align-items:center;
+            }
+            #instructions {
+                padding:2em;
+                    border-radius:2em;
+                background:rgba(255, 255, 255, 50%);
+            }
+        </style>
+    </body>
+</html>
